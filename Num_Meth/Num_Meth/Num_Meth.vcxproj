@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Cubic_Interpolation_Spline_1D.h" />
+    <ClInclude Include="DifGenerate.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Smoothing_Spline_1D.h" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cubic_Interpolation_Spline_1D.cpp" />
+    <ClCompile Include="DifGenerate.cpp" />
     <ClCompile Include="Lesson3_Spline.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Point.cpp" />
