@@ -1,0 +1,15 @@
+#pragma once
+#include <vector>
+#include "Point.h"
+namespace Com_Methods
+{
+	//абстрактный класс сплайна
+	class Spline
+	{
+	public:
+		//обновить сплайн
+		virtual void Update_Spline(const std::vector<Point> &Points, const std::vector<double> &F_Value) = 0;
+		//вычислить значение сплайна в точке P
+		virtual void Get_Value(const Point &P, double * Res)const = 0;
+	};
+}
