@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "pch.h"
 #include <iostream>
 #include <iomanip>
@@ -15,16 +15,16 @@
 class Generate
 {
 public:
-	//регулярное и адаптивное сеточное разбиение
+	//СЂРµРіСѓР»СЏСЂРЅРѕРµ Рё Р°РґР°РїС‚РёРІРЅРѕРµ СЃРµС‚РѕС‡РЅРѕРµ СЂР°Р·Р±РёРµРЅРёРµ
 	std::vector<Com_Methods::Point> regularGrid;
 	std::vector<Com_Methods::Point> irregularGrid;
-	// значение функции при регулярном и адаптивном сеточном разбиении
+	// Р·РЅР°С‡РµРЅРёРµ С„СѓРЅРєС†РёРё РїСЂРё СЂРµРіСѓР»СЏСЂРЅРѕРј Рё Р°РґР°РїС‚РёРІРЅРѕРј СЃРµС‚РѕС‡РЅРѕРј СЂР°Р·Р±РёРµРЅРёРё
 	std::vector<double> func_regularGrid;
 	std::vector<double> func_irregularGrid;
 
 	void Generate_regularGrid(const double &h,  const double& begin, const double& end);
 	void Generate_irregularGrid(const double &h, const double&r, const double&begin, const double&end);
-	// вычисление значений функций
+	// РІС‹С‡РёСЃР»РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ С„СѓРЅРєС†РёР№
 	void Func_x();
 	void Func_x2();
 	void Func_x3();

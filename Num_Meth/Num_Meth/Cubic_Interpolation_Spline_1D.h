@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "Spline.h"
 
 namespace Com_Methods
@@ -6,14 +6,14 @@ namespace Com_Methods
 	class Cubic_Interpolation_Spline_1D : public Spline
 	{
 	private:
-		//точки сетки
+		//С‚РѕС‡РєРё СЃРµС‚РєРё
 		std::vector<Point> Points;
-		//коэффициенты сплайна
+		//РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ СЃРїР»Р°Р№РЅР°
 		std::vector<double> a, b, c, d;
 	public:
-		//обновить сплайн
+		//РѕР±РЅРѕРІРёС‚СЊ СЃРїР»Р°Р№РЅ
 		void Update_Spline(const std::vector<Point> &Points, const std::vector<double> &F_Value) override;
-		//вычислить значение сплайна в точке P
+		//РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ СЃРїР»Р°Р№РЅР° РІ С‚РѕС‡РєРµ P
 		void Get_Value(const Point &P, double * Res)const override;
 	};
 }

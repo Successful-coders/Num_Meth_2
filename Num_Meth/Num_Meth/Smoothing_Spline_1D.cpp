@@ -1,25 +1,25 @@
-#include "pch.h"
+п»ї#include "pch.h"
 #include <functional>
 #include "Smoothing_Spline_1D.h"
 #include <iostream>
 
 namespace Com_Methods
 {
-	//конструктор: SMOOTH - параметр сглаживания
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ: SMOOTH - РїР°СЂР°РјРµС‚СЂ СЃРіР»Р°Р¶РёРІР°РЅРёСЏ
 	Smoothing_Spline_1D::Smoothing_Spline_1D(const double &SMOOTH)
 	{
 		this->SMOOTH = SMOOTH;
 	}
 
-	//переход на мастер элемент [-1, 1]: 
-	//Seg_Num - номер сегмента, Х - абсцисса, Ksi - координата на мастер-элементе
+	//РїРµСЂРµС…РѕРґ РЅР° РјР°СЃС‚РµСЂ СЌР»РµРјРµРЅС‚ [-1, 1]: 
+	//Seg_Num - РЅРѕРјРµСЂ СЃРµРіРјРµРЅС‚Р°, РҐ - Р°Р±СЃС†РёСЃСЃР°, Ksi - РєРѕРѕСЂРґРёРЅР°С‚Р° РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚Рµ
 	void Smoothing_Spline_1D::Transition_To_Master_Element(int Seg_Num, const double &X, double &Ksi) const
 	{
 		Ksi = 2.0 * (X - Points[Seg_Num].x()) / (Points[Seg_Num + 1].x() - Points[Seg_Num].x()) - 1.0;
 	}
 
-	//базисные функции на [-1, 1]:
-	//Number - номер функции, Ksi - координата на мастер-элементе
+	//Р±Р°Р·РёСЃРЅС‹Рµ С„СѓРЅРєС†РёРё РЅР° [-1, 1]:
+	//Number - РЅРѕРјРµСЂ С„СѓРЅРєС†РёРё, Ksi - РєРѕРѕСЂРґРёРЅР°С‚Р° РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚Рµ
 	double Smoothing_Spline_1D::Basis_Function(int Number, const double &Ksi) const
 	{
 		switch (Number)
@@ -30,8 +30,8 @@ namespace Com_Methods
 		}
 	}
 
-	//производные базисных функций на [-1, 1]:
-	//Number - номер функции, Ksi - координата на мастер-элементе
+	//РїСЂРѕРёР·РІРѕРґРЅС‹Рµ Р±Р°Р·РёСЃРЅС‹С… С„СѓРЅРєС†РёР№ РЅР° [-1, 1]:
+	//Number - РЅРѕРјРµСЂ С„СѓРЅРєС†РёРё, Ksi - РєРѕРѕСЂРґРёРЅР°С‚Р° РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚Рµ
 	double Smoothing_Spline_1D::Der_Basis_Function(int Number, const double &Ksi) const
 	{
 		switch (Number)
@@ -42,39 +42,39 @@ namespace Com_Methods
 		}
 	}
 
-	//обновить сплайн
+	//РѕР±РЅРѕРІРёС‚СЊ СЃРїР»Р°Р№РЅ
 	void Smoothing_Spline_1D::Update_Spline(const std::vector<Point>  & Points,
 											const std::vector<double> & F_Value)
 	{
-		//обновление списка точек сплайна
+		//РѕР±РЅРѕРІР»РµРЅРёРµ СЃРїРёСЃРєР° С‚РѕС‡РµРє СЃРїР»Р°Р№РЅР°
 		this->Points.clear();
 		for (auto & elem : Points) this->Points.push_back(elem);
 
-		//число отрезков разбиения
+		//С‡РёСЃР»Рѕ РѕС‚СЂРµР·РєРѕРІ СЂР°Р·Р±РёРµРЅРёСЏ
 		int Num_Segments = Points.size() - 1;
 
-		//коэффициенты разложения по базису
+		//РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ СЂР°Р·Р»РѕР¶РµРЅРёСЏ РїРѕ Р±Р°Р·РёСЃСѓ
 		alpha.resize(Num_Segments + 1);
 
-		//диагонали матрицы
+		//РґРёР°РіРѕРЅР°Р»Рё РјР°С‚СЂРёС†С‹
 		std::vector <double> a, b, c;
 		a.resize(Num_Segments + 1); 
 		b.resize(Num_Segments + 1); 
 		c.resize(Num_Segments + 1);
 		
-		//процедура для ассемблирования СЛАУ: 
-		//Num_Segment - номер отрезка, P - точка, F_Val - значение табличной функции в точке, w - вес  
+		//РїСЂРѕС†РµРґСѓСЂР° РґР»СЏ Р°СЃСЃРµРјР±Р»РёСЂРѕРІР°РЅРёСЏ РЎР›РђРЈ: 
+		//Num_Segment - РЅРѕРјРµСЂ РѕС‚СЂРµР·РєР°, P - С‚РѕС‡РєР°, F_Val - Р·РЅР°С‡РµРЅРёРµ С‚Р°Р±Р»РёС‡РЅРѕР№ С„СѓРЅРєС†РёРё РІ С‚РѕС‡РєРµ, w - РІРµСЃ  
 		std::function<void(int Num_Segment, const Point &P, const double &F_Val, const double &w)> 
 		Assembling = [&](int i, const Point &P, const double &F_Val, const double &w)
 		{
 			double X = P.x(), Ksi;
-			//переход на мастер-элемент
+			//РїРµСЂРµС…РѕРґ РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚
 		    Transition_To_Master_Element(i, X, Ksi);
-			//вычисление значений базисных функций на мастер-элементе
+			//РІС‹С‡РёСЃР»РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ Р±Р°Р·РёСЃРЅС‹С… С„СѓРЅРєС†РёР№ РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚Рµ
 			double f1 = Basis_Function(1, Ksi);
 			double f2 = Basis_Function(2, Ksi);
 
-			//внесение вкладов в СЛАУ
+			//РІРЅРµСЃРµРЅРёРµ РІРєР»Р°РґРѕРІ РІ РЎР›РђРЈ
 			b[i]     += (1.0 - SMOOTH) * w * f1 * f1;
 			b[i + 1] += (1.0 - SMOOTH) * w * f2 * f2;
 			a[i + 1] += (1.0 - SMOOTH) * w * f1 * f2;
@@ -83,15 +83,15 @@ namespace Com_Methods
 			alpha[i + 1] += (1.0 - SMOOTH) * w * f2 * F_Val;
 		};
 
-		//сборка СЛАУ по сетке: сумма вкладов от каждого сегмента разбиения
+		//СЃР±РѕСЂРєР° РЎР›РђРЈ РїРѕ СЃРµС‚РєРµ: СЃСѓРјРјР° РІРєР»Р°РґРѕРІ РѕС‚ РєР°Р¶РґРѕРіРѕ СЃРµРіРјРµРЅС‚Р° СЂР°Р·Р±РёРµРЅРёСЏ
 		for (int i = 0; i < Num_Segments; i++)
 		{
-			//добавление узла сетки в СЛАУ
+			//РґРѕР±Р°РІР»РµРЅРёРµ СѓР·Р»Р° СЃРµС‚РєРё РІ РЎР›РђРЈ
 			double W = 1.0;
 			Assembling(i, this->Points[i], F_Value[i], W);
 			Assembling(i, this->Points[i + 1], F_Value[i + 1], W);
 
-			//вклад от сглаживания по первой производной
+			//РІРєР»Р°Рґ РѕС‚ СЃРіР»Р°Р¶РёРІР°РЅРёСЏ РїРѕ РїРµСЂРІРѕР№ РїСЂРѕРёР·РІРѕРґРЅРѕР№
 			double h = Points[i + 1].x() - Points[i].x();
 			b[i]	 += 1.0 / h * SMOOTH;
 			b[i + 1] += 1.0 / h * SMOOTH;
@@ -99,44 +99,44 @@ namespace Com_Methods
 			c[i]	 -= 1.0 / h * SMOOTH;
 		}
 
-		//метод прогонки: прямой ход
+		//РјРµС‚РѕРґ РїСЂРѕРіРѕРЅРєРё: РїСЂСЏРјРѕР№ С…РѕРґ
 		for (int j = 1; j < Num_Segments + 1; j++)
 		{
-			//диагональ
+			//РґРёР°РіРѕРЅР°Р»СЊ
 			b[j] -= a[j] / b[j - 1] * c[j - 1];
-			//правая часть         
+			//РїСЂР°РІР°СЏ С‡Р°СЃС‚СЊ         
 			alpha[j] -= a[j] / b[j - 1] * alpha[j - 1]; 
 		}
 
-		//метод прогонки: обратный ход
+		//РјРµС‚РѕРґ РїСЂРѕРіРѕРЅРєРё: РѕР±СЂР°С‚РЅС‹Р№ С…РѕРґ
 		alpha[Num_Segments] /= b[Num_Segments];
 		for (int j = Num_Segments - 1; j >= 0; j--)
 			alpha[j] = (alpha[j] - alpha[j + 1] * c[j]) / b[j];
 	}
 
-	//вычислить значение сплайна в точке P
+	//РІС‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ СЃРїР»Р°Р№РЅР° РІ С‚РѕС‡РєРµ P
 	void Smoothing_Spline_1D::Get_Value(const Point &P, double * Res)const
 	{
-		//машинный ноль
+		//РјР°С€РёРЅРЅС‹Р№ РЅРѕР»СЊ
 		double eps = 1e-7;
-		//число отрезков
+		//С‡РёСЃР»Рѕ РѕС‚СЂРµР·РєРѕРІ
 		int Num_Segments = Points.size() - 1;
-		//координата точки
+		//РєРѕРѕСЂРґРёРЅР°С‚Р° С‚РѕС‡РєРё
 		double X = P.x();
 
-		//поиск отрезка, которому принадлежит точка
+		//РїРѕРёСЃРє РѕС‚СЂРµР·РєР°, РєРѕС‚РѕСЂРѕРјСѓ РїСЂРёРЅР°РґР»РµР¶РёС‚ С‚РѕС‡РєР°
 		for (int i = 0; i < Num_Segments; i++)
 		{
 			if (X > Points[i].x() && X < Points[i + 1].x() ||
 				fabs(X - Points[i].x()) < eps ||
 				fabs(X - Points[i + 1].x()) < eps)
 			{
-				//длина отрезка
+				//РґР»РёРЅР° РѕС‚СЂРµР·РєР°
 				double h = Points[i + 1].x() - Points[i].x();
-				//переход на местер-элемент, Ksi - координата на мастер-элементе
+				//РїРµСЂРµС…РѕРґ РЅР° РјРµСЃС‚РµСЂ-СЌР»РµРјРµРЅС‚, Ksi - РєРѕРѕСЂРґРёРЅР°С‚Р° РЅР° РјР°СЃС‚РµСЂ-СЌР»РµРјРµРЅС‚Рµ
 				double Ksi;
 				Transition_To_Master_Element(i, X, Ksi);
-				//вычисляем значение сплайна и производной по базисным функциям
+				//РІС‹С‡РёСЃР»СЏРµРј Р·РЅР°С‡РµРЅРёРµ СЃРїР»Р°Р№РЅР° Рё РїСЂРѕРёР·РІРѕРґРЅРѕР№ РїРѕ Р±Р°Р·РёСЃРЅС‹Рј С„СѓРЅРєС†РёСЏРј
 				Res[0] = alpha[i]      * Basis_Function(1, Ksi) +
 						 alpha[i + 1]  * Basis_Function(2, Ksi);
 				Res[1] = (alpha[i]     * Der_Basis_Function(1, Ksi) +

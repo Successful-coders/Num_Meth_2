@@ -1,4 +1,4 @@
-#include "DifGenerate.h"
+﻿#include "DifGenerate.h"
 
 void Generate::Generate_regularGrid(const double& h,const double& begin, const double& end)
 {

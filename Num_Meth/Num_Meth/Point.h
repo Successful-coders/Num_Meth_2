@@ -1,17 +1,17 @@
-#pragma once
+п»ї#pragma once
 
 namespace Com_Methods
 {
-	//точка
+	//С‚РѕС‡РєР°
 	class Point
 	{
 	private:
-		//координаты
+		//РєРѕРѕСЂРґРёРЅР°С‚С‹
 		double X, Y, Z;
 	public:
-		//конструктор
+		//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 		Point(double x, double y, double z);
-		//доступ к полям
+		//РґРѕСЃС‚СѓРї Рє РїРѕР»СЏРј
 		double x()const;
 		double y()const;
 		double z()const;
