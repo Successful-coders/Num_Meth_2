@@ -15,7 +15,7 @@ int main()
 		Generate gen;
 		gen.Generate_regularGrid(0.5, 2, 4);
 		gen.Generate_irregularGrid(0.5,  2, 2, 4);
-		gen.Func_sinx();
+		gen.Func_x();
 		////регулярная равномерная сетка
 		//std::vector<Com_Methods::Point> Mesh = { Com_Methods::Point(0.0, 0.0, 0.0),
 		//										 Com_Methods::Point(1.0, 0.0, 0.0), 
@@ -31,7 +31,7 @@ int main()
 		//кубический интерполяционный сплайн
 		Com_Methods::Cubic_Interpolation_Spline_1D Sp1;
 		//построение сплайна
-		Sp1.Update_Spline(gen.regularGrid, gen.func_regularGrid);
+		Sp1.Update_Spline(gen.irregularGrid, gen.func_irregularGrid);
 		//значение сплайна в точке
 		Sp1.Get_Value(Test_Point, &Res[0]);
 		std::cout << "\nCubic Interpolation Spline:\n";
