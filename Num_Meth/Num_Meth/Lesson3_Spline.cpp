@@ -221,9 +221,19 @@ int main()
 		std::vector<std::vector<double>> splineValues;
 		double approxError[3];
 		double h = 0.1;
+		FUNCTION_TYPE func = x4;
+		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		FindNorm(func, splinePoints, splineValues, approxError);
 
-		CreateSplineTable_x(-5.0, 5.0, h, FUNCTION_TYPE::sinx, splinePoints, splineValues, false);
-		FindNorm(FUNCTION_TYPE::sinx, splinePoints, splineValues, approxError);
+		std::cout << "Analytical function: " << "x4" << "\n";
+		std::cout << "\n\h = " << h << "\n";
+		std::cout << "Approximation error of function: " << approxError[0] << "\n"
+			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
+
+		h /= 2;
+		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		FindNorm(func, splinePoints, splineValues, approxError);
 
 		std::cout << "\n\h = " << h << "\n";
 		std::cout << "Approximation error of function: " << approxError[0] << "\n"
@@ -231,17 +241,8 @@ int main()
 			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
 
 		h /= 2;
-		CreateSplineTable_x(-5.0, 5.0, h, FUNCTION_TYPE::sinx, splinePoints, splineValues, false);
-		FindNorm(FUNCTION_TYPE::sinx, splinePoints, splineValues, approxError);
-
-		std::cout << "\n\h = " << h << "\n";
-		std::cout << "Approximation error of function: " << approxError[0] << "\n"
-			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
-
-		h /= 2;
-		CreateSplineTable_x(-5.0, 5.0, h, FUNCTION_TYPE::sinx, splinePoints, splineValues, false);
-		FindNorm(FUNCTION_TYPE::sinx, splinePoints, splineValues, approxError);
+		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		FindNorm(func, splinePoints, splineValues, approxError);
 
 		std::cout << "\n\h = " << h << "\n";
 		std::cout << "Approximation error of function: " << approxError[0] << "\n"
