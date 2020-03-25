@@ -87,3 +87,16 @@ void Generate::Func_sinx()
 		func_irregularGrid.push_back(sin(irregularGrid[i].x()));
 	}
 }
+
+void Generate::Func_xsin1000x()
+{
+	for (int i = 0; i < regularGrid.size(); i++)
+	{
+		func_regularGrid.push_back(regularGrid[i].x()*sin(1000*regularGrid[i].x()));
+	}
+
+	for (int i = 0; i < irregularGrid.size(); i++)
+	{
+		func_irregularGrid.push_back(irregularGrid[i].x() * sin(1000 * irregularGrid[i].x()));
+	}
+}

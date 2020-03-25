@@ -8,9 +8,9 @@
 #include "Smoothing_Spline_1D.h"
 #include "DifGenerate.h"
 
-enum FUNCTION_TYPE { x, x2, x3, x4, sinx};
+enum FUNCTION_TYPE { x, x2, x3, x4, sinx, xsin1000x};
 
-void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> &splinePoints, std::vector<std::vector<double>> &splineValues, bool isPrintTable)
+void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> &splinePoints, std::vector<std::vector<double>> &splineValues, bool isPrintTable)//isPrintTable - отображать или нет таблицу
 {
 	Generate gen;
 	gen.Generate_regularGrid(0.5, a, b);
@@ -26,6 +26,8 @@ void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionTyp
 		case x4: gen.Func_x4();
 			break;
 		case sinx: gen.Func_sinx();
+			break;
+		case xsin1000x: gen.Func_xsin1000x();
 			break;
 	}
 	
@@ -70,31 +72,32 @@ void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionTyp
 				<< std::setw(20) << testValues[i][1]
 				<< std::setw(20) << testValues[i][2] << "\n";
 		}
+		//сглаживающий сплайн
+		Com_Methods::Smoothing_Spline_1D Sp2(0.0);
+		//построение сплайна
+		Sp2.Update_Spline(gen.regularGrid, gen.func_regularGrid);
+		//значение сплайна в точках
+		for (int i = 0; i < testPoints.size(); i++)
+		{
+			Sp2.Get_Value(testPoints[i], &(testValues[i][0]));
+		}
+
+		std::cout << "\n\nSmoothing Spline:\n";
+		for (int i = 0; i < testPoints.size(); i++)
+		{
+			std::cout << std::left << std::setw(20) << "x"
+				<< std::setw(20) << "P(x)"
+				<< std::setw(20) << "P'(x)" << "\n";
+			std::cout << std::left << std::setw(20) << testPoints[i].x()
+				<< std::setw(20) << testValues[i][0]
+				<< std::setw(20) << testValues[i][1] << "\n";
+		}
 	}
 
 	splinePoints = testPoints;
 	splineValues = testValues;
 
-	////сглаживающий сплайн
-	//Com_Methods::Smoothing_Spline_1D Sp2(0.0);
-	////построение сплайна
-	//Sp2.Update_Spline(gen.regularGrid, gen.func_regularGrid);
-	////значение сплайна в точках
-	//for (int i = 0; i < testPoints.size(); i++)
-	//{
-	//	Sp2.Get_Value(testPoints[i], &(testValues[i][0]));
-	//}
 
-	//std::cout << "\n\nSmoothing Spline:\n";
-	//for (int i = 0; i < testPoints.size(); i++)
-	//{
-	//	std::cout << std::left << std::setw(20) << "x"
-	//		<< std::setw(20) << "P(x)"
-	//		<< std::setw(20) << "P'(x)" << "\n";
-	//	std::cout << std::left << std::setw(20) << testPoints[i].x()
-	//		<< std::setw(20) << testValues[i][0]
-	//		<< std::setw(20) << testValues[i][1] << "\n";
-	//}
 }
 
 void FindNorm(FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> splinePoints, std::vector<std::vector<double>> splineValues, double approxError[3])
@@ -221,33 +224,33 @@ int main()
 		std::vector<std::vector<double>> splineValues;
 		double approxError[3];
 		double h = 0.1;
-		FUNCTION_TYPE func = x4;
-		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		FUNCTION_TYPE func = x;
+		std::cout << "Analytical function: " << "x" << "\n";
+		std::cout << "\n\h = " << h << "\n";
+		CreateSplineTable_x(-10.0, 10.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		std::cout << "Analytical function: " << "x4" << "\n";
-		std::cout << "\n\h = " << h << "\n";
-		std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
 
 		h /= 2;
-		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		std::cout << "\n\h = " << h << "\n";
+		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		std::cout << "\n\h = " << h << "\n";
-		std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
 
 		h /= 2;
-		CreateSplineTable_x(-5.0, 5.0, h, func, splinePoints, splineValues, false);
+		std::cout << "\n\h = " << h << "\n";
+		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		std::cout << "\n\h = " << h << "\n";
-		std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
 	}
 	catch (std::exception & Ex)
 	{

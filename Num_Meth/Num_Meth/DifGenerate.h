@@ -30,4 +30,5 @@ public:
 	void Func_x3();
 	void Func_x4();
 	void Func_sinx();
+	void Func_xsin1000x();
 };
