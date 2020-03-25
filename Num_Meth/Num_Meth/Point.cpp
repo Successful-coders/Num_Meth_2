@@ -1,11 +1,11 @@
-#include "pch.h"
+п»ї#include "pch.h"
 #include "Point.h"
 
 namespace Com_Methods
 {
-	//конструктор
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Point::Point(double x = 0, double y = 0, double z = 0) : X(x), Y(y), Z(z) {}
-	//доступ к полям
+	//РґРѕСЃС‚СѓРї Рє РїРѕР»СЏРј
 	double Point::x()const {return X;}
 	double Point::y()const {return Y;}
 	double Point::z()const {return Z;}
