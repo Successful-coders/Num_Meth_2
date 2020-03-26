@@ -10,7 +10,7 @@
 
 enum FUNCTION_TYPE { x, x2, x3, x4, sinx, xsin1000x};
 
-void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> &splinePoints, std::vector<std::vector<double>> &splineValues, bool isPrintTable)//isPrintTable - отображать или нет таблицу
+void CreateSplineTable(double a, double b, double h, FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> &splinePoints, std::vector<std::vector<double>> &splineValues, bool isPrintTable)//isPrintTable - отображать или нет таблицу
 {
 	Generate gen;
 	gen.Generate_regularGrid(h, a, b);
@@ -120,6 +120,14 @@ void FindNorm(FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> spline
 			{
 				max = diff;
 			}
+			if (diffOfDerivative1 > maxOfDerivative1)
+			{
+				maxOfDerivative1 = diffOfDerivative1;
+			}
+			if (diffOfDerivative2 > maxOfDerivative2)
+			{
+				maxOfDerivative2 = diffOfDerivative2;
+			}
 		}
 	}
 		break;
@@ -134,6 +142,14 @@ void FindNorm(FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> spline
 			if (diff > max)
 			{
 				max = diff;
+			}
+			if (diffOfDerivative1 > maxOfDerivative1)
+			{
+				maxOfDerivative1 = diffOfDerivative1;
+			}
+			if (diffOfDerivative2 > maxOfDerivative2)
+			{
+				maxOfDerivative2 = diffOfDerivative2;
 			}
 		}
 	}
@@ -224,10 +240,10 @@ int main()
 		std::vector<std::vector<double>> splineValues;
 		double approxError[3];
 		double h = 0.1;
-		FUNCTION_TYPE func = sinx;
+		FUNCTION_TYPE func = x;
 		std::cout << "Analytical function: " << "x" << "\n";
 		std::cout << "\n\h = " << h << "\n";
-		CreateSplineTable_x(-10.0, 10.0, h, func, splinePoints, splineValues, false);
+		CreateSplineTable(0.0, 2.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
 		std::cout << "Approximation error of function: " << approxError[0] << "\n"
@@ -236,7 +252,7 @@ int main()
 
 		h /= 2;
 		std::cout << "\n\h = " << h << "\n";
-		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
+		CreateSplineTable(0, 2.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
 		std::cout << "Approximation error of function: " << approxError[0] << "\n"
@@ -245,7 +261,7 @@ int main()
 
 		h /= 2;
 		std::cout << "\n\h = " << h << "\n";
-		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
+		CreateSplineTable(0, 2.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
 		std::cout << "Approximation error of function: " << approxError[0] << "\n"
