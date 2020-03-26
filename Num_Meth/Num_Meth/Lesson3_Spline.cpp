@@ -13,7 +13,7 @@ enum FUNCTION_TYPE { x, x2, x3, x4, sinx, xsin1000x};
 void CreateSplineTable_x(double a, double b, double h, FUNCTION_TYPE functionType, std::vector<Com_Methods::Point> &splinePoints, std::vector<std::vector<double>> &splineValues, bool isPrintTable)//isPrintTable - отображать или нет таблицу
 {
 	Generate gen;
-	gen.Generate_regularGrid(0.5, a, b);
+	gen.Generate_regularGrid(h, a, b);
 
 	switch (functionType)
 	{
@@ -224,33 +224,33 @@ int main()
 		std::vector<std::vector<double>> splineValues;
 		double approxError[3];
 		double h = 0.1;
-		FUNCTION_TYPE func = x;
+		FUNCTION_TYPE func = sinx;
 		std::cout << "Analytical function: " << "x" << "\n";
 		std::cout << "\n\h = " << h << "\n";
 		CreateSplineTable_x(-10.0, 10.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
 
 		h /= 2;
 		std::cout << "\n\h = " << h << "\n";
 		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
 
 		h /= 2;
 		std::cout << "\n\h = " << h << "\n";
 		CreateSplineTable_x(0, 1.0, h, func, splinePoints, splineValues, false);
 		FindNorm(func, splinePoints, splineValues, approxError);
 
-		/*std::cout << "Approximation error of function: " << approxError[0] << "\n"
+		std::cout << "Approximation error of function: " << approxError[0] << "\n"
 			<< "Approximation error of derivative 1 : " << approxError[1] << "\n"
-			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";*/
+			<< "Approximation error of derivative 2 : " << approxError[2] << "\n";
 	}
 	catch (std::exception & Ex)
 	{
